@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login — Purple & Pink</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-container">
+    <h1>Sign in</h1>
+    <p>Login with your Gmail and password</p>
+
+    <form id="form">
+      <div class="field">
+        <label for="email">Gmail</label>
+        <input type="email" id="email" placeholder="you@gmail.com" required>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password" required>
+      </div>
+
+      <button class="btn" type="submit">Sign In</button>
+
+    
+
+      <div class="alt-actions">
+        <a class="link" href="#">Forgot password?</a>
+        <a class="link" href="#">Help</a>
+      </div>
+    </form>
+
+    <div class="existing-account">
+      Don't have an account? <a href="register.html">Register</a>
+    </div>
+  </div>
+
+  <script type="module" src="login.js"></script>
+</body>
+</html>
