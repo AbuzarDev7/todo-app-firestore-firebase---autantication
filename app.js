@@ -1,21 +1,55 @@
 import { 
-  collection, addDoc, Timestamp, getDocs, query, orderBy, 
+  collection, addDoc, Timestamp, getDocs, query, where, 
   deleteDoc, updateDoc, doc 
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js"; 
-import { db } from "./config.js";
+import { auth,db } from "./config.js";
+import {
+  signOut,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+
 
 const form = document.querySelector("#form");
 const todoTitle = document.querySelector("#todo-title");
 const todoDesc = document.querySelector("#todo-desc");
 const container = document.querySelector("#container");
+let userUID;
+
+const logoutBtn = document.querySelector("#btn");
+logoutBtn.addEventListener("click", () => {
+  signOut(auth)
+    .then(() => {
+      window.location = "login.html";
+    })
+    .catch((error) => {
+      alert("error occured");
+    });
+});
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    console.log("logged in user UID ==>", uid);
+    getDataFromDB(uid);
+    userUID = uid
+  } else {
+    window.location = "login.html";
+  }
+});
 
 // push all todo in array 
 let allTodo = [];
 
-async function getDataFromDB() {
+async function getDataFromDB(uid) {
+
+    const q = query(
+    collection(db, "todos"),
+    where("uid", "==", uid)
+   
+  );
+
   // resighn all todo save id 
   allTodo = [];
-  const q = query(collection(db, "todos"), orderBy("time", "desc"));
+
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((docSnap) => {
     // docsnap doc id userpush in array 
@@ -33,6 +67,7 @@ form.addEventListener("submit", async (e) => {
     title: todoTitle.value,
     todoDesc: todoDesc.value,
     time: Timestamp.fromDate(new Date()),
+        uid: userUID
   };
 
   try {
